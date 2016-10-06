@@ -1,0 +1,17 @@
+package com.example;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.cloud.config.server.EnableConfigServer;
+
+@SpringBootApplication
+@EnableWebSecurity
+@EnableCaching
+public class RestWeatherServiceApplication  {
+   
+	public static void main(String[] args) {
+		SpringApplication.run(RestWeatherServiceApplication.class, args);
+	}
+}

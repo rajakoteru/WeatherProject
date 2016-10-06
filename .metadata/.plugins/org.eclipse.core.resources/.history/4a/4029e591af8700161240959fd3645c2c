@@ -1,0 +1,21 @@
+/*package com.configserver;
+
+import org.springframework.cloud.bootstrap.config.PropertySourceLocator;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.util.StringUtils;
+
+public class ConfigServiceBootstrapConfiguration {
+	@Bean
+	public PropertySourceLocator configServiceFilePropertySource(
+	        ConfigurableEnvironment environment) {
+	    ConfigServiceFilePropertySourceLocator locator = new ConfigServiceFilePropertySourceLocator();
+	    String[] profiles = environment.getActiveProfiles();
+	    if (profiles.length==0) {
+	        profiles = environment.getDefaultProfiles();
+	    }
+	    locator.setEnv(StringUtils.arrayToCommaDelimitedString(profiles));
+	    return locator;
+	}
+}
+*/

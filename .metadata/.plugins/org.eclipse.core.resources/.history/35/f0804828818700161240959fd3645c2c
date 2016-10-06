@@ -1,0 +1,17 @@
+package com.configserver;
+
+public class ConfigServerConfiguration {
+	@Configuration
+	@Profile("file")
+	protected static class SpringApplicationConfiguration {
+	@Value("${spring.cloud.config.server.uri}")
+	String locations;
+
+	@Bean
+	public SpringApplicationEnvironmentRepository repository() {
+	SpringApplicationEnvironmentRepository repo = new SpringApplicationEnvironmentRepository();
+	repo.setSearchLocations(locations);
+	return repo;
+	}
+	}
+}

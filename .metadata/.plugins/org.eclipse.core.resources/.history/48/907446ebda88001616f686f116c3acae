@@ -1,0 +1,34 @@
+package com.example;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.cloud.config.server.EnableConfigServer;
+
+@SpringBootApplication
+@EnableWebSecurity
+@EnableCaching
+@EnableConfigServer
+public class RestWeatherServiceApplication  extends SpringBootServletInitializer {
+	
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+    	application = ((Object) new SpringApplicationBuilder()
+    		    .parent(new Object[]{"classpath:file1.xml", "classpath:file2.xml"})
+    		    .profiles("abc")
+    		    .properties("key1:test1", "key2:test2")) 
+    		    .showBanner(false)
+    		    .logStartupInfo(true)
+    		    .headless(true)
+    		    .application()
+    		    .run();
+        return application.sources(RestWeatherServiceApplication.class);
+    }
+   
+	public static void main(String[] args) {
+		SpringApplication.run(RestWeatherServiceApplication.class, args);
+	}
+}

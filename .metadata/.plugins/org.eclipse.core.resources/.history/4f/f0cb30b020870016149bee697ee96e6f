@@ -1,0 +1,21 @@
+package com.aspects;
+
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.springframework.stereotype.Component;
+
+/**
+ * Created by Raja Koteru on 9/29/2016.
+ */
+@Aspect
+@Component
+public class ControllerAspect {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ControllerAspect.class);
+
+	@Before("execution(* com.example.GreetingController.getZipcodeByStateCity (java.lang.String, java.lang.String)) && args(state, city)")
+	public void beforeGetZipcodeByStateCity(String state, String city) {
+
+		LOGGER.info("State: " + state +"City"+city);
+	}
+}

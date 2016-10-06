@@ -1,0 +1,23 @@
+package com.aspects;
+
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+/**
+ * Created by Raja Koteru on 9/29/2016.
+ */
+@Aspect
+@Component
+public class ControllerAspect {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ControllerAspect.class);
+
+	@Before("execution(* com.example.GreetingController.getZipcodeByStateCity (java.lang.String,java.lang.String)) && args(state, city)")
+	public void beforeGetZipcodeByStateCity(String sampleName) {
+
+		LOGGER.info("A request was issued for a sample name: " + sampleName);
+	}
+}

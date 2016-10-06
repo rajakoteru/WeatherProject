@@ -1,0 +1,7 @@
+server.port=8888
+security.user.name=user
+security.user.password=pwd
+
+spring:  
+  application:
+    name: application

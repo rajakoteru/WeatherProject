@@ -1,0 +1,21 @@
+package com.aspects;
+
+	
+	 
+	/**
+	 * Created by gkatzioura on 5/28/16.
+	 */
+	@Aspect
+	@Component
+	public class ControllerAspect {
+	 
+	    private static final Logger LOGGER = LoggerFactory.getLogger(SampleServiceAspect.class);
+	 
+	    @Before("execution(* com.gkatzioura.spring.aop.service.SampleService.createSample (java.lang.String)) && args(sampleName)")
+	    public void beforeSampleCreation(String sampleName) {
+	 
+	        LOGGER.info("A request was issued for a sample name: "+sampleName);
+	    }
+	 
+	}
+}

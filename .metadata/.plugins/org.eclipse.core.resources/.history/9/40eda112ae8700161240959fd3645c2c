@@ -1,0 +1,132 @@
+package com.configserver;
+
+/*
+ * Copyright 2013-2014 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+
+
+* you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Iterator;
+import java.util.Properties;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cloud.bootstrap.config.PropertySourceLocator;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.PropertiesPropertySource;
+import org.springframework.core.env.PropertySource;
+import org.springframework.util.StringUtils;
+
+/**
+ * @author Al Dispennette
+ *
+ */
+@ConfigurationProperties("spring.cloud.config")
+public class ConfigServiceFilePropertySourceLocator implements PropertySourceLocator {
+    private Log logger = LogFactory.getLog(ConfigServiceFilePropertySourceLocator.class);
+
+    private String env = "default";
+
+    @Value("${spring.application.name:'application'}")
+    private String name;
+
+    private String label = name;
+
+    private String basedir = System.getProperty("user.home");   
+
+	@Override
+	public PropertySource<?> locate(Environment environment) {
+		try {
+            return getPropertySource();
+        } catch (IOException e) {
+            logger.error("An error ocurred while loading the properties.",e);
+        }
+
+		return null;
+	}
+
+    /**
+     * @throws IOException
+     */
+    private PropertySource getPropertySource() throws IOException {
+        Properties source = new Properties();
+        Path path = Paths.get(getUri());
+        if(Files.isDirectory(path)){
+            Iterator<Path> itr = Files.newDirectoryStream(path).iterator();
+            String fileName = null!=label||StringUtils.hasText(label)?label:name+".properties";
+            logger.info("Searching for {}"+fileName);
+            while(itr.hasNext()){
+                Path tmpPath = itr.next();
+                if(tmpPath.getFileName().getName(0).toString().equals(fileName)){
+                    logger.info("Found file: {}");
+                    source.load(Files.newInputStream(tmpPath));
+                }
+            }
+        }
+        return new PropertiesPropertySource("configService",source);
+    }
+
+    public String getUri() {
+        StringBuilder bldr = new StringBuilder(basedir)
+        .append(File.separator)
+        .append(env)
+        .append(File.separator)
+        .append(name);
+
+        logger.info("loading properties directory: {}"+bldr.toString());
+        return bldr.toString();
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEnv() {
+        return env;
+    }
+
+    public void setEnv(String env) {
+        this.env = env;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getBasedir() {
+        return basedir;
+    }
+
+    public void setBasedir(String basedir) {
+        this.basedir = basedir;
+    }
+
+}
